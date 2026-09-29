@@ -1,3 +1,8 @@
+const dns = require('dns');
+// Render সার্ভারে IPv4 এবং Google DNS ব্যবহার বাধ্য করার জন্য
+dns.setDefaultResultOrder('ipv4first');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -9,10 +14,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://abubakrsiddik9043_db_user:H4R3ECv4oYy02KTe@ac-5bolusn-shard-00-00.uqrevs4.mongodb.net:27017,ac-5bolusn-shard-00-01.uqrevs4.mongodb.net:27017,ac-5bolusn-shard-00-02.uqrevs4.mongodb.net:27017/bkb_college?ssl=true&replicaSet=atlas-2is7hf-shard-0&authSource=admin&appName=Cluster0';
+// MongoDB Connection String
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://abubakrsiddik9043_db_user:H4R3ECv4oYy02KTe@cluster0.uqrevs4.mongodb.net/bkb_college?retryWrites=true&w=majority';
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, {
+  serverSelectionTimeoutMS: 5000
+})
   .then(() => console.log('✅ MongoDB Atlas-এর সাথে ব্যাকএন্ড সফলভাবে সংযুক্ত হয়েছে!'))
   .catch(err => console.error('❌ MongoDB কানেকশন ত্রুটি:', err));
 
