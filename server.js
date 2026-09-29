@@ -15,7 +15,7 @@ app.use(express.json());
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://abubakrsiddik9043_db_user:H4R3ECv4oYy02KTe@cluster0.uqrevs4.mongodb.net/bkb_college?appName=Cluster0';
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, { family: 4 })
   .then(() => console.log('✅ MongoDB Atlas-এর সাথে ব্যাকএন্ড সফলভাবে সংযুক্ত হয়েছে!'))
   .catch(err => console.error('❌ MongoDB কানেকশন ত্রুটি:', err));
 
