@@ -1,6 +1,3 @@
-const dns = require('dns');
-dns.setServers(['8.8.8.8', '8.8.4.4']);
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -13,9 +10,9 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://abubakrsiddik9043_db_user:H4R3ECv4oYy02KTe@cluster0.uqrevs4.mongodb.net/bkb_college?appName=Cluster0';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://abubakrsiddik9043_db_user:H4R3ECv4oYy02KTe@ac-5bolusn-shard-00-00.uqrevs4.mongodb.net:27017,ac-5bolusn-shard-00-01.uqrevs4.mongodb.net:27017,ac-5bolusn-shard-00-02.uqrevs4.mongodb.net:27017/bkb_college?ssl=true&replicaSet=atlas-2is7hf-shard-0&authSource=admin&appName=Cluster0';
 
-mongoose.connect(MONGODB_URI, { family: 4 })
+mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ MongoDB Atlas-এর সাথে ব্যাকএন্ড সফলভাবে সংযুক্ত হয়েছে!'))
   .catch(err => console.error('❌ MongoDB কানেকশন ত্রুটি:', err));
 
@@ -38,13 +35,10 @@ const Notice = mongoose.model('Notice', noticeSchema);
 const Teacher = mongoose.model('Teacher', teacherSchema);
 
 // API Endpoints
-
-// ১. টেস্ট রুট
 app.get('/', (req, res) => {
   res.send('Bikrampur K. B. Govt. College API Server is Running!');
 });
 
-// ২. নোটিশ পাওয়ার API
 app.get('/api/notices', async (req, res) => {
   try {
     const notices = await Notice.find().sort({ _id: -1 });
@@ -54,7 +48,6 @@ app.get('/api/notices', async (req, res) => {
   }
 });
 
-// ৩. নতুন নোটিশ যোগ করার API
 app.post('/api/notices', async (req, res) => {
   try {
     const newNotice = new Notice(req.body);
@@ -65,7 +58,6 @@ app.post('/api/notices', async (req, res) => {
   }
 });
 
-// ৪. শিক্ষকদের তালিকা পাওয়ার API
 app.get('/api/teachers', async (req, res) => {
   try {
     const teachers = await Teacher.find().sort({ sl: 1 });
@@ -75,7 +67,6 @@ app.get('/api/teachers', async (req, res) => {
   }
 });
 
-// ৫. নতুন শিক্ষক যোগ করার API
 app.post('/api/teachers', async (req, res) => {
   try {
     const newTeacher = new Teacher(req.body);
